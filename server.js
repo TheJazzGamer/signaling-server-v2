@@ -28,7 +28,7 @@ server.on("connection", (socket) => {
 
     socket.on("colse", () => {
         if (room && rooms[room]) {
-            rooms[room] = rooms[room].filter((s) => !== socket);
+            rooms[room] = rooms[room].filter((s) => s !== socket);
         }
     });
 });
