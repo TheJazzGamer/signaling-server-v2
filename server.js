@@ -21,6 +21,23 @@ wss.on("connection", (socket) => {
     socket.on("message", (msg) => {
         const data = JSON.parse(msg);
 
+        //leave logic
+        if (data.leave) {
+            const code = data.leave;
+            if(rooms[code]) {
+                rooms[code].forEach(s => {
+                    if(s !== socket) {
+                        s.send(JSON.stringify({ left: true }));
+                    }
+                    s.close();
+                });
+                delete rooms[code];
+                console.log('Room ${code} closed by host.');
+            }
+            return;
+        }
+
+        //join logic
         if (data.join) {
             room = data.join;
             rooms[room] = rooms[room] || [];
