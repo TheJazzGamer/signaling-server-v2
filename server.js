@@ -1,9 +1,21 @@
+const http = require("http");
 const WebSocket = require("ws");
-const server = new WebSocket.Server({ port: process.env.PORT || 10000 });
+
+const server = http.createServer((req, res) => {
+    if (req.url === "/ping") {
+        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.end("pong");
+    } else {
+        res.writeHead(404);
+        res.end();
+    }
+});
+
+const wss = new WebSocket.Server({ server });
 
 let rooms = {}; // {roomCode: [socket1, socket2] }
 
-server.on("connection", (socket) => {
+wss.on("connection", (socket) => {
     let room = null;
 
     socket.on("message", (msg) => {
@@ -26,7 +38,7 @@ server.on("connection", (socket) => {
         }
     });
 
-    socket.on("colse", () => {
+    socket.on("close", () => {
         if (room && rooms[room]) {
             rooms[room] = rooms[room].filter((s) => s !== socket);
         }
@@ -34,3 +46,7 @@ server.on("connection", (socket) => {
 });
 
 console.log("Signaling server running...");
+
+server.listen(process.env.PORT || 10000, () => {
+    console.log("HTTP + WebSocket server running");
+});
