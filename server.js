@@ -16,9 +16,13 @@ const wss = new WebSocket.Server({ server });
 let rooms = {}; // {roomCode: [socket1, socket2] }
 
 wss.on("connection", (socket) => {
+    console.log("✅ WebSocket connection received");
+
     let room = null;
 
     socket.on("message", (msg) => {
+        console.log("📨 Message from client:", msg);
+        
         const data = JSON.parse(msg);
 
         //leave logic
@@ -66,6 +70,8 @@ wss.on("connection", (socket) => {
     });
 
     socket.on("close", () => {
+        console.log("❌ WebSocket connection closed");
+        
         if (room && rooms[room]) {
             rooms[room] = rooms[room].filter((s) => s !== socket);
         }
@@ -74,6 +80,8 @@ wss.on("connection", (socket) => {
 
 console.log("Signaling server running...");
 
-server.listen(process.env.PORT || 10000, () => {
+const PORT = process.env.PORT;
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`HTTP + WebSocket server running on port ${PORT}`);
     console.log("HTTP + WebSocket server running");
 });
