@@ -32,7 +32,7 @@ wss.on("connection", (socket) => {
                     s.close();
                 });
                 delete rooms[code];
-                console.log('Room ${code} closed by host.');
+                console.log(`Room ${code} closed by host.`);
             }
             return;
         }
@@ -40,7 +40,17 @@ wss.on("connection", (socket) => {
         //join logic
         if (data.join) {
             room = data.join;
-            rooms[room] = rooms[room] || [];
+
+            if (!rooms[room] && data.host === true) {
+                rooms[room] = [];
+            }
+
+            // If not host, only allow joining existing room
+            if (!rooms[room]) {
+                socket.send(JSON.stringify({ error: "room_not_found" }));
+                return;
+            }
+
             rooms[room].push(socket);
 
             if (rooms[room].length === 2) {
