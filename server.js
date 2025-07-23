@@ -76,13 +76,9 @@ wss.on("connection", (socket) => {
 // Handle WebSocket upgrade manually for Render routing
 server.on("upgrade", (req, socket, head) => {
   console.log("🔁 HTTP Upgrade request to:", req.url);
-  if (req.url === "/ws") {
-    wss.handleUpgrade(req, socket, head, (ws) => {
-      wss.emit("connection", ws, req);
-    });
-  } else {
-    socket.destroy();
-  }
+  wss.handleUpgrade(req, socket, head, (ws) => {
+    wss.emit("connection", ws, req);
+  });
 });
 
 if (!process.env.PORT) {
