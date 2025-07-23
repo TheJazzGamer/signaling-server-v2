@@ -11,7 +11,17 @@ const server = http.createServer((req, res) => {
     }
 });
 
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ noServer: true });
+
+server.on("upgrade", (req, socket, head) => {
+    if (req.url === "/ws") {
+        wss.handleUpgrade(req, socket, head, (ws) => {
+            wss.emit("connection", ws, req);
+        });
+    } else {
+        socket.destroy();
+    }
+});
 
 let rooms = {}; // {roomCode: [socket1, socket2] }
 
