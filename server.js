@@ -80,8 +80,10 @@ wss.on("connection", (socket) => {
 
 console.log("Signaling server running...");
 
-const port = process.env.PORT;
-server.listen(port, () => {
-    console.log(`HTTP + WebSocket server running on port ${port}`);
-    console.log("HTTP + WebSocket server running");
+const port = process.env.PORT || 3000;
+if (!process.env.PORT) {
+    console.warn("⚠️ No process.env.PORT — using fallback port", port);
+}
+server.listen(port, '0,0,0,0', () => {
+    console.log(`✅ HTTP + WebSocket server running on port ${port}`);
 });
