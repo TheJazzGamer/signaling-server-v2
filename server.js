@@ -80,8 +80,8 @@ wss.on("connection", (socket) => {
 
 console.log("Signaling server running...");
 
-const PORT = process.env.PORT;
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`HTTP + WebSocket server running on port ${PORT}`);
+const port = process.env.PORT;
+server.listen(port, '0.0.0.0', () => {
+    console.log(`HTTP + WebSocket server running on port ${port}`);
     console.log("HTTP + WebSocket server running");
 });
