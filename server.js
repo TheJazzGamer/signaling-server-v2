@@ -80,10 +80,10 @@ wss.on("connection", (socket) => {
 
 console.log("Signaling server running...");
 
-const port = process.env.PORT;
 if (!process.env.PORT) {
-    console.warn("⚠️ No process.env.PORT);
+    throw new Error("❌ process.env.PORT is not defined. Render requires it.");
 }
+const port = process.env.PORT;
 server.listen(port, '0.0.0.0', () => {
     console.log(`✅ HTTP + WebSocket server running on port ${port}`);
 });
