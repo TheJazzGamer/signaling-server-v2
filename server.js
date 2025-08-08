@@ -37,6 +37,7 @@ wss.on("connection", (socket) => {
                 });
                 delete rooms[code];
                 console.log(`❌ Room ${code} closed by host.`);
+                console.log(rooms);
             }
             return;
         }
@@ -90,3 +91,4 @@ const port = process.env.PORT || 3000;
 server.listen(port, '0.0.0.0', () => {
     console.log(`✅ HTTP + WebSocket server running on port ${port}`);
 });
+
